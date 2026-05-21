@@ -1,11 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Products</h2>
+
+<!-- Loading message -->
+<p id="loading">Loading...</p>
+
+<div id="products"></div>
+
+<script>
+
 let loading = document.getElementById("loading");
-let errorMsg = document.getElementById("error");
 let container = document.getElementById("products");
 
 fetch("https://fakestoreapi.com/products")
   .then(res => res.json())
   .then(data => {
 
+    // hide loading after data comes
     loading.style.display = "none";
 
     data.forEach(product => {
@@ -14,8 +27,7 @@ fetch("https://fakestoreapi.com/products")
 
       div.innerHTML = `
         <img src="${product.image}" width="100"><br>
-        ${product.title.slice(0, 20)}...<br>
-        ${product.description.slice(0, 50)}...<br>
+        ${product.title}<br>
         ₹${product.price}<br><br>
       `;
 
@@ -24,8 +36,9 @@ fetch("https://fakestoreapi.com/products")
     });
 
   })
-  .catch(err => {
-    loading.style.display = "none";
-    container.innerHTML = "";
-    errorMsg.innerText = "Error Fetching Data";
-  });
+  .catch(err => console.log(err));
+
+</script>
+
+</body>
+</html>

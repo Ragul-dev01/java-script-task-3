@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products</title>
+</head>
+<body>
+
+<h2>Products</h2>
+
+<h3>Cart Count: <span id="count">0</span></h3>
+<h3>Total: ₹<span id="total">0</span></h3>
+
+<div id="products"></div>
+
+<script>
+
+let container = document.getElementById("products");
+let count = document.getElementById("count");
+let totalEl = document.getElementById("total");
+
+let allProducts = [];
+let cart = [];
+
+// fetch API
+fetch("https://fakestoreapi.com/products")
+.then(res => res.json())
+.then(data => {
+  allProducts = data;
+  displayProducts(data);
+});
+
+// display function
+function displayProducts(data) {
+  container.innerHTML = "";
+
+  data.forEach(product => {
+    let div = document.createElement("div");
+
+    div.innerHTML = `
+      <img src="${product.image}" width="100"><br>
+      ${product.title}<br>
+      ₹${product.price}<br>
+
+      <button onclick="addToCart(${product.id})">Add To Cart</button>
+      <button onclick="removeFromCart(${product.id})">Remove</button>
+
+      <br><br>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// ✅ Add
+function addToCart(id) {
+  let product = allProducts.find(p => p.id === id);
+  cart.push(product);
+
+  updateCart();
+}
+
+// ✅ Remove
+function removeFromCart(id) {
+  let index = cart.findIndex(p => p.id === id);
+
+  if (index !== -1) {
+    cart.splice(index, 1);
+  }
+
+  updateCart();
+}
+
+// ✅ Update count + total
+function updateCart() {
+
+  // count
+  count.innerText = cart.length;
+
+  // total price
+  let total = 0;
+
+  cart.forEach(item => {
+    total += item.price;
+  });
+
+  totalEl.innerText = total.toFixed(2);
+}
+
+</script>
+
+</body>
+</html>

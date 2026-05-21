@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products</title>
+</head>
+<body>
+
+  <h2>Products</h2>
+
+  <p id="loading">Loading...</p>
+  <p id="error" style="color:red;"></p>
+
+  <div id="products"></div>
+
+  <script>
+    let loading = document.getElementById("loading");
+    let errormsg = document.getElementById("error");
+    let container = document.getElementById("products");
+
+    fetch("https://fakestoreapi.com/products")
+      .then(res => res.json())
+      .then(data => {
+
+        loading.style.display = "none";
+
+        data.forEach(product => {
+          let div = document.createElement("div");
+
+          div.innerHTML = `
+            <img src="${product.image}" width="100"><br>
+            ${product.title}<br>
+            ₹${product.price}<br><br>
+          `;
+
+          container.appendChild(div);
+        });
+
+      })
+      .catch(err => {
+        loading.style.display = "none";
+        container.innerHTML = "";
+        errormsg.innerText = "Error Fetching Data";
+      });
+  </script>
+
+</body>
+</html>
